@@ -1,4 +1,8 @@
 # Scraper
 ## Usage
 
-    node scraper.js
+    node souteze.js
+or run (Windows)
+
+    souteze-win.exe
+    
