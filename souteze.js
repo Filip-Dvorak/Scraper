@@ -1,5 +1,6 @@
 const request = require('request');
 const cheerio = require('cheerio');
+const { Console } = require('console');
 
 
 request('https://www.csts.cz/cs/KalendarSoutezi/Seznam?OdData=05%2F01%2F2022%2000%3A00%3A00&DoData=08%2F31%2F2023%2000%3A00%3A00&Region=0', (error,
@@ -35,8 +36,14 @@ response, html) => {
 			});
 		}
 		});
-	//	console.log(soutez);
 	}
 	});
   }
 });
+
+var readline = require('readline');
+
+var rl = readline.createInterface(
+	process.stdin, process.stdout);
+
+
