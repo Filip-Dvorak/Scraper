@@ -2,8 +2,26 @@ const request = require('request');
 const cheerio = require('cheerio');
 const { Console } = require('console');
 
+const dateOd = new Date();
+const odDate = dateOd.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
 
-request('https://www.csts.cz/cs/KalendarSoutezi/Seznam?OdData=05%2F01%2F2022%2000%3A00%3A00&DoData=08%2F31%2F2023%2000%3A00%3A00&Region=0', (error,
+const dateDo = new Date(dateOd.setMonth(dateOd.getMonth()+1));
+const doDate = dateDo.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+
+const odUrl = encodeURIComponent(odDate);
+const doUrl = encodeURIComponent(doDate);
+
+const mainUrl = 'https://www.csts.cz/cs/KalendarSoutezi/Seznam?OdData=' + odUrl + '&DoData=' + doUrl + '&Region=0';
+
+request(mainUrl, (error,
 response, html) => {
   if (!error && response.statusCode == 200) {
     const $ = cheerio.load(html);
@@ -16,6 +34,11 @@ response, html) => {
 	const sep = "/";
 	const _id = (link.split(sep));
 	const id = _id[4];
+
+	const dateData = $(el).parent().parent().find($('.big-text')).text();
+	const regex = /\d+.\d+.\d+/g;
+	const date = dateData.match(regex);
+	
 	if( info.includes(kat))
 	{
 		const url = 'https://www.csts.cz/cs/KalendarSoutezi/SeznamPrihlasenych/' + id ;
@@ -29,6 +52,7 @@ response, html) => {
 		    if( x(le).text().includes(kat))
 		    	{
 		    		console.log(soutez);
+					console.log(date[0]);
 					console.log(x(le).text());
 					console.log("----------------------------------------------------------------------------------------------------");
 				}
